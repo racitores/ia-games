@@ -1,6 +1,7 @@
 image: node:18
 
 stages:
+  - prepare
   - build
   - deploy
 
@@ -8,17 +9,51 @@ cache:
   paths:
     - node_modules/
 
+generate-routes:
+  stage: prepare
+  script:
+    - npm install
+    - echo "// Este archivo se genera automáticamente - No editar manualmente" > src/routes.js
+    - echo "const routes = [" >> src/routes.js
+    
+    # Script para generar rutas dinámicamente basadas en las carpetas de aplicaciones
+    - |
+      for APP_DIR in $(find src/apps -maxdepth 1 -mindepth 1 -type d); do
+        APP_NAME=$(basename $APP_DIR)
+        APP_PATH="/${APP_NAME}"
+        
+        # Obtiene la descripción del comentario en el archivo index.js si existe
+        DESCRIPTION=""
+        if grep -q "// description:" $APP_DIR/index.js; then
+          DESCRIPTION=$(grep "// description:" $APP_DIR/index.js | sed 's/\/\/ description: //')
+        else
+          DESCRIPTION="Aplicación $APP_NAME"
+        fi
+        
+        echo "  {" >> src/routes.js
+        echo "    path: \"$APP_PATH\"," >> src/routes.js
+        echo "    name: \"${APP_NAME//-/ }\"," >> src/routes.js
+        echo "    description: \"$DESCRIPTION\"," >> src/routes.js
+        echo "    component: require('./apps/$APP_NAME').default" >> src/routes.js
+        echo "  }," >> src/routes.js
+      done
+    
+    - echo "];" >> src/routes.js
+    - echo "export default routes;" >> src/routes.js
+    - cat src/routes.js # Para debug
+  artifacts:
+    paths:
+      - src/routes.js
+    expire_in: 1 hour
+
 build:
   stage: build
   script:
     - npm install
-    - mkdir -p src/components
-    - cp games/compatibility.js src/App.js
     - npm run build
   artifacts:
     paths:
       - build/
-    expire_in: 1 hour
 
 pages:
   stage: deploy
@@ -30,5 +65,3 @@ pages:
       - public
   only:
     - main
-  needs:
-    - build
