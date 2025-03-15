@@ -1,5 +1,32 @@
-# The Docker image that will be used to build your app
 image: node:lts
-# Functions that should be executed before the build script is run
-before_script:
-  - npm ci
+
+stages:
+  - build
+  - deploy
+
+cache:
+  paths:
+    - node_modules/
+
+build:
+  stage: build
+  script:
+    - npm install
+    - npm run build
+  artifacts:
+    paths:
+      - build/
+    expire_in: 1 hour
+
+pages:
+  stage: deploy
+  script:
+    - rm -rf public
+    - mv build public
+  artifacts:
+    paths:
+      - public
+  only:
+    - main  
+  needs:
+    - build
