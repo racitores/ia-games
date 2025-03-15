@@ -5,10 +5,10 @@
 
 const routes = [
     {
-      path: "/calculadora-compatibilidad",
-      name: "Calculadora de Compatibilidad",
+      path: "/Compatibility",
+      name: "Calculadora de compatibilidad",
       description: "Calcula la compatibilidad entre dos nombres",
-      component: require('./apps/calculadora-compatibilidad').default
+      component: require('./apps/compatibility').default
     },
     // Aquí se añadirán automáticamente más rutas cuando añadas nuevas aplicaciones
   ];
