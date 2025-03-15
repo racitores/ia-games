@@ -1,4 +1,4 @@
-image: node:lts
+image: node:18
 
 stages:
   - build
@@ -12,6 +12,8 @@ build:
   stage: build
   script:
     - npm install
+    - mkdir -p src/components
+    - cp games/compatibility.js src/App.js
     - npm run build
   artifacts:
     paths:
@@ -27,6 +29,6 @@ pages:
     paths:
       - public
   only:
-    - main  
+    - main
   needs:
     - build
