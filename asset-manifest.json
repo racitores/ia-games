@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/ai-games/static/css/main.13cedd71.css",
+    "main.js": "/ai-games/static/js/main.9b5866f5.js",
+    "index.html": "/ai-games/index.html",
+    "main.13cedd71.css.map": "/ai-games/static/css/main.13cedd71.css.map",
+    "main.9b5866f5.js.map": "/ai-games/static/js/main.9b5866f5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.13cedd71.css",
+    "static/js/main.9b5866f5.js"
+  ]
+}
