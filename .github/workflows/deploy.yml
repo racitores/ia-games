@@ -16,13 +16,15 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "18"
-          cache: "yarn"
 
-      - name: Enable Corepack
-        run: corepack enable
+      - name: Setup Yarn
+        run: |
+          corepack enable
+          corepack prepare yarn@4.9.1 --activate
+          yarn --version
 
       - name: Install Dependencies
-        run: yarn install --frozen-lockfile
+        run: yarn install --immutable
 
       - name: Build
         run: yarn build
