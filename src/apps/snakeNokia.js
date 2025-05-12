@@ -1,7 +1,7 @@
 // description: El clásico juego de la serpiente con controles táctiles y de teclado
 // categories: Diversión, Clásicos, Arcade
 import React, { useEffect, useRef, useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 
 const SnakeNokia = () => {
   const canvasRef = useRef(null);

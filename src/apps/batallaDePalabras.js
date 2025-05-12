@@ -1,7 +1,7 @@
 // description: Un juego educativo donde los jugadores deben encontrar palabras que empiecen con una letra específica y compartir datos interesantes sobre ellas
 // categories: Educativo, Lenguaje, Escolar
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 
 const WordExplorerGame = () => {
   // Estados para manejar el juego

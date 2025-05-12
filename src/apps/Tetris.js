@@ -1,7 +1,7 @@
 // description: El clásico juego de Tetris con controles táctiles y de teclado
 // categories: Arcade, Clásicos, Diversión
 import React, { useEffect, useRef } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 
 const Tetris = () => {
   const canvasRef = useRef(null);

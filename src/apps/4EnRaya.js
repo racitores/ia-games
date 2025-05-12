@@ -1,7 +1,12 @@
 // description: El clásico juego de 4 en Raya con animaciones y efectos visuales
 // categories: Estrategia, Clásicos, Multijugador
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
 
 const ROWS = 6;
 const COLS = 7;

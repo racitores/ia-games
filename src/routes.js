@@ -3,138 +3,86 @@
 // IMPORTANTE: No modifiques este archivo manualmente, se generará automáticamente
 // basado en el contenido del directorio /src/apps
 
-import { lazy } from "react";
+import React, { lazy } from "react";
 
-// Importar todos los componentes de apps
-const appContext = require.context("./apps", true, /\.(js|html)$/);
-const rawContext = require.context("!raw-loader!./apps", true, /\.(js|html)$/);
+// Importar todos los componentes de la carpeta apps
+const appsContext = require.context("!raw-loader!./apps", true, /\.(js|html)$/);
 
 // Función para extraer metadatos del código fuente
 const extractMetadata = (sourceCode) => {
-  if (!sourceCode) {
-    console.warn("sourceCode es undefined o null");
-    return {
-      description: "",
-      categories: [],
-    };
-  }
-
-  const descriptionMatch = sourceCode.match(/\/\/\s*description:\s*(.+)/);
-  const categoriesMatch = sourceCode.match(/\/\/\s*categories:\s*(.+)/);
-
-  const metadata = {
-    description: descriptionMatch ? descriptionMatch[1].trim() : "",
-    categories: categoriesMatch
-      ? categoriesMatch[1].split(",").map((cat) => cat.trim())
-      : [],
-  };
-
-  console.log("Metadatos extraídos:", metadata);
-  return metadata;
-};
-
-// Función para cargar juegos externos
-const loadExternalGame = async (url) => {
   try {
-    const response = await fetch(url);
-    const sourceCode = await response.text();
-    const metadata = extractMetadata(sourceCode);
-    return { sourceCode, metadata };
+    // Asegurarnos de que tenemos el string del código fuente
+    const code = sourceCode.default || sourceCode;
+
+    const descriptionMatch = code.match(/\/\/\s*description:\s*(.+)/);
+    const categoriesMatch = code.match(/\/\/\s*categories:\s*(.+)/);
+
+    return {
+      description: descriptionMatch ? descriptionMatch[1].trim() : "",
+      categories: categoriesMatch
+        ? categoriesMatch[1].split(",").map((cat) => cat.trim())
+        : [],
+    };
   } catch (error) {
-    console.error("Error al cargar el juego externo:", error);
-    return null;
+    console.error("Error al extraer metadatos:", error);
+    return { description: "", categories: [] };
   }
 };
 
-// Función para añadir juegos externos
-const addExternalGame = async (url) => {
-  const game = await loadExternalGame(url);
-  if (game) {
-    // Aquí podrías implementar la lógica para añadir el juego a la lista
-    console.log("Juego externo cargado:", game);
-  }
-};
+// Función para cargar juegos
+const loadGames = () => {
+  const games = [];
+  appsContext.keys().forEach((key) => {
+    try {
+      const name = key
+        .split("/")
+        .pop()
+        .replace(/\.(js|html)$/, "");
+      const sourceCode = appsContext(key);
+      const metadata = extractMetadata(sourceCode);
 
-// Generar rutas basadas en los archivos en el directorio apps
-const routes = appContext.keys().map((key) => {
-  console.log("Procesando archivo:", key);
-  const appName = key.replace(/^\.\/(.*)\.(js|html)$/, "$1");
-  const displayName = appName
-    .split(/(?=[A-Z])/)
-    .join(" ")
-    .replace(/^\w/, (c) => c.toUpperCase());
+      // Crear el componente lazy usando la ruta correcta
+      const Component = lazy(() => import(`./apps/${name}.js`));
 
-  // Obtener el código fuente del archivo usando raw-loader
-  const rawModule = rawContext(key);
-  const sourceCode = rawModule.default || rawModule;
-  console.log(
-    "Código fuente obtenido para",
-    appName,
-    ":",
-    sourceCode.substring(0, 100)
-  );
-  const metadata = extractMetadata(sourceCode);
-
-  // Importar el componente de forma dinámica
-  const Component = lazy(() => {
-    console.log("Importando componente:", `./apps/${appName}`);
-    return import(`./apps/${appName}`)
-      .then((module) => {
-        console.log("Módulo cargado:", module);
-        // Si el módulo tiene una exportación por defecto, úsala
-        if (module.default) {
-          return { default: module.default };
-        }
-        // Si no, busca la primera exportación que sea un componente
-        const component = Object.values(module).find(
-          (value) => typeof value === "function" && value.name
-        );
-        if (component) {
-          return { default: component };
-        }
-        throw new Error(`No se encontró un componente válido en ${appName}`);
-      })
-      .catch((error) => {
-        console.error(`Error al cargar el componente ${appName}:`, error);
-        throw error;
+      games.push({
+        path: `/${name.toLowerCase().replace(/\s+/g, "-")}`,
+        name: name,
+        element: <Component />,
+        description: metadata.description,
+        categories: metadata.categories,
       });
+    } catch (error) {
+      console.error(`Error al cargar el juego ${key}:`, error);
+    }
   });
+  return games;
+};
 
-  return {
-    path: `/${appName.toLowerCase()}`,
-    element: <Component />,
-    name: displayName,
-    description: metadata.description,
-    categories: metadata.categories,
-  };
-});
+// Generar rutas
+const routes = loadGames();
 
-// Obtener todas las categorías únicas
+// Exportar categorías únicas
 export const categories = [
-  ...new Set(routes.flatMap((route) => route.categories)),
-].sort();
-
-console.log("Categorías disponibles:", categories);
-console.log("Rutas generadas:", routes);
+  ...new Set(routes.flatMap((route) => route.categories || [])),
+];
 
 // Función para filtrar rutas por categoría
 export const filterRoutesByCategory = (category) => {
-  return routes.filter((route) => route.categories.includes(category));
-};
-
-// Función para buscar rutas por texto
-export const searchRoutes = (searchText) => {
-  const searchLower = searchText.toLowerCase();
-  return routes.filter(
-    (route) =>
-      route.name.toLowerCase().includes(searchLower) ||
-      route.description.toLowerCase().includes(searchLower) ||
-      route.categories.some((cat) => cat.toLowerCase().includes(searchLower))
+  return routes.filter((route) =>
+    route.categories ? route.categories.includes(category) : false
   );
 };
 
-// Exportar las rutas y funciones auxiliares
-export { routes, addExternalGame };
+// Función para buscar rutas
+export const searchRoutes = (searchTerm) => {
+  const term = searchTerm.toLowerCase();
+  return routes.filter(
+    (route) =>
+      route.name.toLowerCase().includes(term) ||
+      route.description.toLowerCase().includes(term) ||
+      (route.categories &&
+        route.categories.some((cat) => cat.toLowerCase().includes(term)))
+  );
+};
 
-// Exportación por defecto para mantener compatibilidad
 export default routes;
