@@ -2,7 +2,7 @@
   "name": "multi-app-portfolio",
   "version": "0.1.0",
   "private": true,
-  "homepage": ".",
+  "homepage": "https://racitores.github.io/ai-games",
   "dependencies": {
     "@craco/craco": "^7.1.0",
     "@radix-ui/react-slot": "^1.0.2",

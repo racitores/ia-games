@@ -1,6 +1,6 @@
 # 🤖 AI Games
 
-![AI Games Banner](https://raw.githubusercontent.com/racitores/school-games/main/public/banner.png)
+![AI Games Banner](./public/banner.png)
 
 Una colección de juegos interactivos desarrollados con React y potenciados por Inteligencia Artificial, diseñados para ofrecer una experiencia de juego única y adaptativa.
 
