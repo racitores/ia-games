@@ -1,4 +1,4 @@
-name: Deploy to Hosting
+name: Deploy to GitHub Pages
 
 on:
   push:
@@ -31,12 +31,8 @@ jobs:
         env:
           CI: false
 
-      - name: Deploy to Server
-        uses: appleboy/scp-action@master
+      - name: Deploy
+        uses: JamesIves/github-pages-deploy-action@v4
         with:
-          host: ${{ secrets.SSH_HOST }}
-          username: ${{ secrets.SSH_USERNAME }}
-          key: ${{ secrets.SSH_KEY }}
-          source: "build/*"
-          target: ${{ secrets.SSH_TARGET_DIR }}
-          strip_components: 1
+          folder: build
+          branch: gh-pages
