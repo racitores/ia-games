@@ -7,7 +7,7 @@ module.exports = {
     },
     configure: {
       output: {
-        publicPath: "/ia-games/",
+        publicPath: "",
       },
     },
   },
