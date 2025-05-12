@@ -131,9 +131,9 @@ const CalculadoraCompatibilidad = () => {
   };
 
   // Función para probar con ejemplos
-  const probarEjemploNikolAitor = () => {
-    setNombre1("Nikol");
-    setNombre2("Aitor");
+  const probarEjemploDanielSabrina = () => {
+    setNombre1("Daniel");
+    setNombre2("Sabrina");
     setTimeout(calcularCompatibilidad, 100);
   };
 
@@ -183,10 +183,10 @@ const CalculadoraCompatibilidad = () => {
         </button>
 
         <button
-          onClick={probarEjemploNikolAitor}
+          onClick={probarEjemploDanielSabrina}
           className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
         >
-          Ejemplo: Nikol y Aitor
+          Ejemplo: Daniel y Sabrina
         </button>
 
         <button

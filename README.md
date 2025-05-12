@@ -41,13 +41,13 @@ git clone https://github.com/racitores/school-games.git
 
 ```bash
 cd school-games
-npm install
+yarn
 ```
 
 3. Inicia el servidor de desarrollo:
 
 ```bash
-npm start
+yarn start
 ```
 
 ## 📝 Estructura del Proyecto
@@ -89,7 +89,7 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE.md](LICENSE.m
 
 ## 👥 Autores
 
-- **Ramona Citores** - _Desarrollo inicial_ - [racitores](https://github.com/racitores)
+- **Ramon Acitores** - _Desarrollo inicial_ - [racitores](https://github.com/racitores)
 
 ## 🙏 Agradecimientos
 
