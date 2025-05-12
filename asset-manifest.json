@@ -1,13 +1,25 @@
 {
   "files": {
-    "main.css": "/ai-games/static/css/main.13cedd71.css",
-    "main.js": "/ai-games/static/js/main.9b5866f5.js",
+    "main.css": "/ai-games/static/css/main.3de1cd4c.css",
+    "main.js": "/ai-games/static/js/main.f941d38e.js",
+    "static/js/73.d773ecdb.chunk.js": "/ai-games/static/js/73.d773ecdb.chunk.js",
+    "static/js/756.0f15316d.chunk.js": "/ai-games/static/js/756.0f15316d.chunk.js",
+    "static/js/451.f398ea6a.chunk.js": "/ai-games/static/js/451.f398ea6a.chunk.js",
+    "static/js/435.bcb778e1.chunk.js": "/ai-games/static/js/435.bcb778e1.chunk.js",
+    "static/js/466.4605012b.chunk.js": "/ai-games/static/js/466.4605012b.chunk.js",
+    "static/js/907.47ed1fde.chunk.js": "/ai-games/static/js/907.47ed1fde.chunk.js",
     "index.html": "/ai-games/index.html",
-    "main.13cedd71.css.map": "/ai-games/static/css/main.13cedd71.css.map",
-    "main.9b5866f5.js.map": "/ai-games/static/js/main.9b5866f5.js.map"
+    "main.3de1cd4c.css.map": "/ai-games/static/css/main.3de1cd4c.css.map",
+    "main.f941d38e.js.map": "/ai-games/static/js/main.f941d38e.js.map",
+    "73.d773ecdb.chunk.js.map": "/ai-games/static/js/73.d773ecdb.chunk.js.map",
+    "756.0f15316d.chunk.js.map": "/ai-games/static/js/756.0f15316d.chunk.js.map",
+    "451.f398ea6a.chunk.js.map": "/ai-games/static/js/451.f398ea6a.chunk.js.map",
+    "435.bcb778e1.chunk.js.map": "/ai-games/static/js/435.bcb778e1.chunk.js.map",
+    "466.4605012b.chunk.js.map": "/ai-games/static/js/466.4605012b.chunk.js.map",
+    "907.47ed1fde.chunk.js.map": "/ai-games/static/js/907.47ed1fde.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.13cedd71.css",
-    "static/js/main.9b5866f5.js"
+    "static/css/main.3de1cd4c.css",
+    "static/js/main.f941d38e.js"
   ]
 }
