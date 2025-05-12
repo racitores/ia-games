@@ -1,105 +1,165 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
-import routes from './routes';
+import React, { useState, useEffect, Suspense } from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import routes, {
+  categories,
+  filterRoutesByCategory,
+  searchRoutes,
+} from "./routes";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
-const NotFound = () => <div className="p-8 text-center">Aplicación no encontrada</div>;
+// Componente de carga
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-screen">
+    <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
+  </div>
+);
 
-const Navigation = () => {
-  const location = useLocation();
-  
+function App() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [filteredRoutes, setFilteredRoutes] = useState(routes);
+
+  // Debug: Mostrar las categorías disponibles y las rutas al cargar
+  useEffect(() => {
+    console.log("Categorías disponibles:", categories);
+    console.log(
+      "Rutas con sus categorías:",
+      routes.map((route) => ({
+        name: route.name,
+        categories: route.categories,
+      }))
+    );
+  }, []);
+
+  useEffect(() => {
+    if (searchTerm) {
+      setFilteredRoutes(searchRoutes(searchTerm));
+    } else if (selectedCategory) {
+      console.log("Filtrando por categoría:", selectedCategory);
+      const filtered = filterRoutesByCategory(selectedCategory);
+      console.log("Rutas filtradas:", filtered);
+      setFilteredRoutes(filtered);
+    } else {
+      setFilteredRoutes(routes);
+    }
+  }, [searchTerm, selectedCategory]);
+
   return (
-    <nav className="bg-gray-800 text-white">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center">
-            <Link to="/" className="flex-shrink-0 font-bold">
-              Mis Aplicaciones
-            </Link>
-          </div>
-          
-          <div className="flex">
-            <div className="hidden md:block">
-              <div className="ml-10 flex items-baseline space-x-4">
-                {routes.map((route) => (
-                  <Link
-                    key={route.path}
-                    to={route.path}
-                    className={`px-3 py-2 rounded-md text-sm font-medium ${
-                      location.pathname === route.path
-                        ? 'bg-gray-900 text-white'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-                    }`}
-                  >
-                    {route.name}
+    <Router>
+      <div className="min-h-screen bg-gray-100">
+        <nav className="bg-white shadow-lg">
+          <div className="max-w-7xl mx-auto px-4">
+            <div className="flex justify-between h-16">
+              <div className="flex">
+                <div className="flex-shrink-0 flex items-center">
+                  <Link to="/" className="text-xl font-bold text-gray-800">
+                    School Games
                   </Link>
-                ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
-      
-      {/* Menú móvil */}
-      <div className="md:hidden">
-        <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-          {routes.map((route) => (
-            <Link
-              key={route.path}
-              to={route.path}
-              className={`block px-3 py-2 rounded-md text-base font-medium ${
-                location.pathname === route.path
-                  ? 'bg-gray-900 text-white'
-                  : 'text-gray-300 hover:bg-gray-700 hover:text-white'
-              }`}
-            >
-              {route.name}
-            </Link>
-          ))}
-        </div>
-      </div>
-    </nav>
-  );
-};
+        </nav>
 
-function App() {
-  return (
-    <Router basename={process.env.PUBLIC_URL}>
-      <div className="min-h-screen bg-gray-100">
-        <Navigation />
-        
-        <main className="py-6">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+          <Suspense fallback={<LoadingFallback />}>
             <Routes>
-              <Route path="/" element={
-                <div className="p-8 bg-white rounded-lg shadow">
-                  <h1 className="text-2xl font-bold mb-4">Bienvenido a mi colección de aplicaciones</h1>
-                  <p className="mb-4">Selecciona una aplicación del menú superior para comenzar.</p>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-                    {routes.map((route) => (
-                      <Link
-                        key={route.path}
-                        to={route.path}
-                        className="p-4 border rounded-lg hover:bg-gray-50 transition-colors"
-                      >
-                        <h2 className="text-lg font-medium">{route.name}</h2>
-                        <p className="text-gray-600 text-sm mt-1">{route.description || 'Sin descripción'}</p>
-                      </Link>
-                    ))}
+              <Route
+                path="/"
+                element={
+                  <div>
+                    <div className="mb-8">
+                      <div className="flex flex-col md:flex-row gap-4 mb-4">
+                        <input
+                          type="text"
+                          placeholder="Buscar juegos..."
+                          className="flex-1 p-2 border rounded-lg"
+                          value={searchTerm}
+                          onChange={(e) => {
+                            setSearchTerm(e.target.value);
+                            setSelectedCategory("");
+                          }}
+                        />
+                        <select
+                          className="p-2 border rounded-lg"
+                          value={selectedCategory}
+                          onChange={(e) => {
+                            console.log(
+                              "Categoría seleccionada:",
+                              e.target.value
+                            );
+                            setSelectedCategory(e.target.value);
+                            setSearchTerm("");
+                          }}
+                        >
+                          <option value="">Todas las categorías</option>
+                          {categories.map((category) => (
+                            <option key={category} value={category}>
+                              {category}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+
+                      {searchTerm && (
+                        <div className="text-sm text-gray-600 mb-4">
+                          Resultados de búsqueda para: "{searchTerm}"
+                        </div>
+                      )}
+
+                      {selectedCategory && (
+                        <div className="text-sm text-gray-600 mb-4">
+                          Mostrando juegos de la categoría: {selectedCategory}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      {filteredRoutes.map((route) => (
+                        <Link
+                          key={route.path}
+                          to={route.path}
+                          className="block hover:transform hover:scale-105 transition-transform duration-200"
+                        >
+                          <Card className="h-full">
+                            <CardHeader className="bg-blue-500 text-white">
+                              <CardTitle>{route.name}</CardTitle>
+                            </CardHeader>
+                            <CardContent className="p-4">
+                              <p className="text-gray-600 mb-2">
+                                {route.description}
+                              </p>
+                              {route.categories &&
+                                route.categories.length > 0 && (
+                                  <div className="flex flex-wrap gap-2 mt-2">
+                                    {route.categories.map((category) => (
+                                      <span
+                                        key={category}
+                                        className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full"
+                                      >
+                                        {category}
+                                      </span>
+                                    ))}
+                                  </div>
+                                )}
+                            </CardContent>
+                          </Card>
+                        </Link>
+                      ))}
+                    </div>
                   </div>
-                </div>
-              } />
-              
+                }
+              />
+
               {routes.map((route) => (
                 <Route
                   key={route.path}
                   path={route.path}
-                  element={<route.component />}
+                  element={route.element}
                 />
               ))}
-              
-              <Route path="*" element={<NotFound />} />
             </Routes>
-          </div>
+          </Suspense>
         </main>
       </div>
     </Router>

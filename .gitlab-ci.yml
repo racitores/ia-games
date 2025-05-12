@@ -10,46 +10,16 @@ cache:
   paths:
     - node_modules/
 
-generate-routes:
+prepare:
   stage: prepare
   script:
     - npm install
     # Instalar componentes shadcn/ui en src/components/ui
     - mkdir -p src/components/ui
     - npx shadcn-ui@latest add card --ui-dir src/components/ui --no-interactive
-    
-    - echo "// Este archivo se genera automáticamente - No editar manualmente" > src/routes.js
-    - echo "const routes = [" >> src/routes.js
-    
-    # Script para generar rutas dinámicamente basadas en las carpetas de aplicaciones
-    - |
-      for APP_DIR in $(find src/apps -maxdepth 1 -mindepth 1 -type d); do
-        APP_NAME=$(basename $APP_DIR)
-        APP_PATH="/${APP_NAME}"
-        
-        # Obtiene la descripción del comentario en el archivo index.js si existe
-        DESCRIPTION=""
-        if grep -q "// description:" $APP_DIR/index.js; then
-          DESCRIPTION=$(grep "// description:" $APP_DIR/index.js | sed 's/\/\/ description: //')
-        else
-          DESCRIPTION="Aplicación $APP_NAME"
-        fi
-        
-        echo "  {" >> src/routes.js
-        echo "    path: \"$APP_PATH\"," >> src/routes.js
-        echo "    name: \"${APP_NAME//-/ }\"," >> src/routes.js
-        echo "    description: \"$DESCRIPTION\"," >> src/routes.js
-        echo "    component: require('./apps/$APP_NAME').default" >> src/routes.js
-        echo "  }," >> src/routes.js
-      done
-    
-    - echo "];" >> src/routes.js
-    - echo "export default routes;" >> src/routes.js
-    - cat src/routes.js # Para debug
   artifacts:
     paths:
-      - src/routes.js
-      - src/components/ui/  # Incluir los componentes de shadcn/ui generados
+      - src/components/ui/ # Incluir los componentes de shadcn/ui generados
     expire_in: 1 hour
 
 build:
@@ -57,9 +27,9 @@ build:
   script:
     - npm install
     # Asegurarse de que los componentes de shadcn/ui estén disponibles
-    - if [ ! -d "src/components/ui/card" ]; then 
-        mkdir -p src/components/ui && 
-        npx shadcn-ui@latest add card --ui-dir src/components/ui --no-interactive; 
+    - if [ ! -d "src/components/ui/card" ]; then
+      mkdir -p src/components/ui &&
+      npx shadcn-ui@latest add card --ui-dir src/components/ui --no-interactive;
       fi
     - npm run build
   artifacts:
