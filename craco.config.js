@@ -5,5 +5,10 @@ module.exports = {
     alias: {
       "@": path.resolve(__dirname, "src"),
     },
+    configure: {
+      output: {
+        publicPath: "/ia-games/",
+      },
+    },
   },
 };
