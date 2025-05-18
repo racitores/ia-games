@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/ia-games/static/css/main.a2659adc.css",
-    "main.js": "/ia-games/static/js/main.8e4ca147.js",
+    "main.css": "/ia-games/static/css/main.ffe751db.css",
+    "main.js": "/ia-games/static/js/main.12d66f5d.js",
     "index.html": "/ia-games/index.html",
-    "main.a2659adc.css.map": "/ia-games/static/css/main.a2659adc.css.map",
-    "main.8e4ca147.js.map": "/ia-games/static/js/main.8e4ca147.js.map"
+    "main.ffe751db.css.map": "/ia-games/static/css/main.ffe751db.css.map",
+    "main.12d66f5d.js.map": "/ia-games/static/js/main.12d66f5d.js.map"
   },
   "entrypoints": [
-    "static/css/main.a2659adc.css",
-    "static/js/main.8e4ca147.js"
+    "static/css/main.ffe751db.css",
+    "static/js/main.12d66f5d.js"
   ]
 }
