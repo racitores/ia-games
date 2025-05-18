@@ -7,7 +7,9 @@ import { BrowserRouter } from "react-router-dom";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <BrowserRouter basename="/ia-games">
+    <BrowserRouter
+      basename={process.env.NODE_ENV === "production" ? "/ia-games" : ""}
+    >
       <App />
     </BrowserRouter>
   </React.StrictMode>

@@ -4,6 +4,8 @@
   "private": true,
   "homepage": "https://racitores.github.io/ia-games",
   "dependencies": {
+    "@babel/plugin-transform-modules-commonjs": "^7.27.1",
+    "@babel/standalone": "^7.27.2",
     "@craco/craco": "^7.1.0",
     "@testing-library/dom": "^9.3.3",
     "@testing-library/jest-dom": "^5.17.0",

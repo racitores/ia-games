@@ -1523,6 +1523,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/standalone@npm:^7.27.2":
+  version: 7.27.2
+  resolution: "@babel/standalone@npm:7.27.2"
+  checksum: 10c0/3eea15073d481ac785547064dc2e5f95c5e564ed66e4ebfcb09e5929353cf6359377ea3ce7dff5ed1e367dc4daa95e52bda137190d2d11b8c88c0a089c325b65
+  languageName: node
+  linkType: hard
+
 "@babel/template@npm:^7.27.1, @babel/template@npm:^7.3.3":
   version: 7.27.2
   resolution: "@babel/template@npm:7.27.2"
@@ -7918,6 +7925,8 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "ia-games@workspace:."
   dependencies:
+    "@babel/plugin-transform-modules-commonjs": "npm:^7.27.1"
+    "@babel/standalone": "npm:^7.27.2"
     "@craco/craco": "npm:^7.1.0"
     "@testing-library/dom": "npm:^9.3.3"
     "@testing-library/jest-dom": "npm:^5.17.0"

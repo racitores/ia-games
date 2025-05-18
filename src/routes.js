@@ -3,86 +3,61 @@
 // IMPORTANTE: No modifiques este archivo manualmente, se generará automáticamente
 // basado en el contenido del directorio /src/apps
 
-import React, { lazy } from "react";
+import React, { lazy, Suspense } from "react";
+import DynamicGameLoader from "./components/DynamicGameLoader";
 
-// Importar todos los componentes de la carpeta apps
-const appsContext = require.context("!raw-loader!./apps", true, /\.(js|html)$/);
+const appsContext = require.context("./apps", true, /\.js$/);
 
-// Función para extraer metadatos del código fuente
-const extractMetadata = (sourceCode) => {
-  try {
-    // Asegurarnos de que tenemos el string del código fuente
-    const code = sourceCode.default || sourceCode;
+// Componente de carga
+const LoadingFallback = () => (
+  <div className="min-h-screen flex items-center justify-center">
+    <div className="text-2xl text-blue-600">Cargando...</div>
+  </div>
+);
 
-    const descriptionMatch = code.match(/\/\/\s*description:\s*(.+)/);
-    const categoriesMatch = code.match(/\/\/\s*categories:\s*(.+)/);
+// Crear rutas estáticas
+const staticGames = appsContext.keys().map((key) => {
+  const name = key.split("/").pop().replace(/\.js$/, "");
+  const path = `/${name.toLowerCase().replace(/\s+/g, "-")}`;
+  const source = appsContext(key).toString();
 
-    return {
-      description: descriptionMatch ? descriptionMatch[1].trim() : "",
-      categories: categoriesMatch
-        ? categoriesMatch[1].split(",").map((cat) => cat.trim())
-        : [],
-    };
-  } catch (error) {
-    console.error("Error al extraer metadatos:", error);
-    return { description: "", categories: [] };
-  }
-};
+  // Extraer metadatos del código fuente
+  const nameMatch = source.match(/\/\/\s*name:\s*(.+)/);
+  const descriptionMatch = source.match(/\/\/\s*description:\s*(.+)/);
+  const categoriesMatch = source.match(/\/\/\s*categories:\s*(.+)/);
 
-// Función para cargar juegos
-const loadGames = () => {
-  const games = [];
-  appsContext.keys().forEach((key) => {
-    try {
-      const name = key
-        .split("/")
-        .pop()
-        .replace(/\.(js|html)$/, "");
-      const sourceCode = appsContext(key);
-      const metadata = extractMetadata(sourceCode);
+  // Crear el componente lazy
+  const LazyComponent = lazy(() => import(`./apps/${name}.js`));
 
-      // Crear el componente lazy usando la ruta correcta
-      const Component = lazy(() => import(`./apps/${name}.js`));
+  return {
+    path,
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <LazyComponent />
+      </Suspense>
+    ),
+    name: nameMatch ? nameMatch[1].trim() : name,
+    description: descriptionMatch
+      ? descriptionMatch[1].trim()
+      : `Juego ${name}`,
+    categories: categoriesMatch
+      ? categoriesMatch[1].split(",").map((cat) => cat.trim())
+      : ["General"],
+  };
+});
 
-      games.push({
-        path: `/${name.toLowerCase().replace(/\s+/g, "-")}`,
-        name: name,
-        element: <Component />,
-        description: metadata.description,
-        categories: metadata.categories,
-      });
-    } catch (error) {
-      console.error(`Error al cargar el juego ${key}:`, error);
-    }
-  });
-  return games;
-};
-
-// Generar rutas
-const routes = loadGames();
+// Exportar las rutas
+export const routes = [
+  {
+    path: "/load-game",
+    element: <DynamicGameLoader />,
+  },
+  ...staticGames,
+];
 
 // Exportar categorías únicas
 export const categories = [
   ...new Set(routes.flatMap((route) => route.categories || [])),
 ];
-
-// Función para filtrar rutas por categoría
-export const filterRoutesByCategory = (category) => {
-  return routes.filter((route) =>
-    route.categories ? route.categories.includes(category) : false
-  );
-};
-
-// Función para buscar rutas
-export const searchRoutes = (searchTerm) => {
-  const term = searchTerm.toLowerCase();
-  return routes.filter(
-    (route) =>
-      route.name.toLowerCase().includes(term) ||
-      route.description.toLowerCase().includes(term) ||
-      (route.categories &&
-        route.categories.some((cat) => cat.toLowerCase().includes(term)))
-  );
-};
 
 export default routes;

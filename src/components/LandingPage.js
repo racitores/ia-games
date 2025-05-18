@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Github } from "lucide-react";
 
 const LandingPage = () => {
   return (
@@ -15,16 +16,34 @@ const LandingPage = () => {
                 </Link>
               </div>
             </div>
+            <div className="flex items-center">
+              <a
+                href="https://github.com/racitores/ia-games"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-gray-600 hover:text-gray-900 flex items-center gap-2"
+              >
+                <Github className="w-6 h-6" />
+                <span>Ver en GitHub</span>
+              </a>
+            </div>
           </div>
         </div>
       </nav>
 
+      <div className="relative w-full h-64 bg-gradient-to-r from-blue-500 to-purple-600 mb-8">
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center text-white">
+            <h1 className="text-5xl font-bold mb-4">🤖 AI Games</h1>
+            <p className="text-xl">
+              Juegos interactivos desarrollados con IA y React
+            </p>
+          </div>
+        </div>
+      </div>
+
       <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
         <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">🤖 AI Games</h1>
-          <p className="text-xl text-gray-600 mb-8">
-            Una colección de juegos interactivos desarrollados con IA y React
-          </p>
           <Link
             to="/games"
             className="inline-block bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors"
@@ -40,8 +59,8 @@ const LandingPage = () => {
             </CardHeader>
             <CardContent className="p-4">
               <p className="text-gray-600">
-                Colección de juegos interactivos, diseñados para ofrecer
-                una experiencia única y adaptativa.
+                Colección de juegos interactivos, diseñados para ofrecer una
+                experiencia única y adaptativa.
               </p>
             </CardContent>
           </Card>
@@ -69,6 +88,15 @@ const LandingPage = () => {
               </p>
             </CardContent>
           </Card>
+        </div>
+
+        <div className="text-center mt-8">
+          <Link
+            to="/load-game"
+            className="inline-block bg-green-500 text-white px-8 py-3 rounded-lg text-lg font-semibold hover:bg-green-600 transition-colors"
+          >
+            Cargar Nuevo Juego
+          </Link>
         </div>
       </main>
     </div>
