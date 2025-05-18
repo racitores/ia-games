@@ -1,25 +1,25 @@
 {
   "files": {
-    "main.css": "/static/css/main.3de1cd4c.css",
-    "main.js": "/static/js/main.3392ce19.js",
-    "static/js/73.6b977e0e.chunk.js": "/static/js/73.6b977e0e.chunk.js",
-    "static/js/756.00181c5f.chunk.js": "/static/js/756.00181c5f.chunk.js",
-    "static/js/451.ffcef5cf.chunk.js": "/static/js/451.ffcef5cf.chunk.js",
-    "static/js/435.a12ca185.chunk.js": "/static/js/435.a12ca185.chunk.js",
-    "static/js/466.ac376645.chunk.js": "/static/js/466.ac376645.chunk.js",
-    "static/js/907.248b2a04.chunk.js": "/static/js/907.248b2a04.chunk.js",
-    "index.html": "/index.html",
-    "main.3de1cd4c.css.map": "/static/css/main.3de1cd4c.css.map",
-    "main.3392ce19.js.map": "/static/js/main.3392ce19.js.map",
-    "73.6b977e0e.chunk.js.map": "/static/js/73.6b977e0e.chunk.js.map",
-    "756.00181c5f.chunk.js.map": "/static/js/756.00181c5f.chunk.js.map",
-    "451.ffcef5cf.chunk.js.map": "/static/js/451.ffcef5cf.chunk.js.map",
-    "435.a12ca185.chunk.js.map": "/static/js/435.a12ca185.chunk.js.map",
-    "466.ac376645.chunk.js.map": "/static/js/466.ac376645.chunk.js.map",
-    "907.248b2a04.chunk.js.map": "/static/js/907.248b2a04.chunk.js.map"
+    "main.css": "/ia-games/static/css/main.3de1cd4c.css",
+    "main.js": "/ia-games/static/js/main.09cf1465.js",
+    "static/js/73.6b977e0e.chunk.js": "/ia-games/static/js/73.6b977e0e.chunk.js",
+    "static/js/756.00181c5f.chunk.js": "/ia-games/static/js/756.00181c5f.chunk.js",
+    "static/js/451.ffcef5cf.chunk.js": "/ia-games/static/js/451.ffcef5cf.chunk.js",
+    "static/js/435.a12ca185.chunk.js": "/ia-games/static/js/435.a12ca185.chunk.js",
+    "static/js/466.ac376645.chunk.js": "/ia-games/static/js/466.ac376645.chunk.js",
+    "static/js/907.248b2a04.chunk.js": "/ia-games/static/js/907.248b2a04.chunk.js",
+    "index.html": "/ia-games/index.html",
+    "main.3de1cd4c.css.map": "/ia-games/static/css/main.3de1cd4c.css.map",
+    "main.09cf1465.js.map": "/ia-games/static/js/main.09cf1465.js.map",
+    "73.6b977e0e.chunk.js.map": "/ia-games/static/js/73.6b977e0e.chunk.js.map",
+    "756.00181c5f.chunk.js.map": "/ia-games/static/js/756.00181c5f.chunk.js.map",
+    "451.ffcef5cf.chunk.js.map": "/ia-games/static/js/451.ffcef5cf.chunk.js.map",
+    "435.a12ca185.chunk.js.map": "/ia-games/static/js/435.a12ca185.chunk.js.map",
+    "466.ac376645.chunk.js.map": "/ia-games/static/js/466.ac376645.chunk.js.map",
+    "907.248b2a04.chunk.js.map": "/ia-games/static/js/907.248b2a04.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.3de1cd4c.css",
-    "static/js/main.3392ce19.js"
+    "static/js/main.09cf1465.js"
   ]
 }
