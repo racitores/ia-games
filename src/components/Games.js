@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { routes, categories } from "../routes";
+import Navbar from "./Navbar";
 
 const Games = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,6 +31,8 @@ const Games = () => {
 
   return (
     <div className="min-h-screen bg-gray-100">
+      <Navbar />
+
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">Juegos Disponibles</h1>
 
