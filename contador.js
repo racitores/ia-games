@@ -3,7 +3,7 @@
 // categories: Interactivo, Básico, React, Matemáticas
 
 import React, { useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from "./src/components/Navbar";
 
 const Contador = () => {
   const [count, setCount] = useState(0);

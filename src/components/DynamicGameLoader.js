@@ -46,6 +46,7 @@ const DynamicGameLoader = () => {
       // Transformar el código usando Babel
       const transformedCode = Babel.transform(fileContent, {
         presets: ["react"],
+        plugins: [["transform-modules-commonjs", { strictMode: false }]],
       }).code;
 
       // Crear un módulo dinámico
@@ -58,10 +59,22 @@ const DynamicGameLoader = () => {
         "useState",
         "module",
         "exports",
+        "require",
         transformedCode
       );
 
-      gameFunction(React, React.useState, module, exports);
+      // Función require simulada
+      const require = (path) => {
+        if (path.startsWith("react")) {
+          return React;
+        }
+        if (path.startsWith("./")) {
+          return {};
+        }
+        return {};
+      };
+
+      gameFunction(React, React.useState, module, exports, require);
 
       const GameComponent = module.exports.default || exports.default;
 

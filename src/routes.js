@@ -5,8 +5,8 @@
 
 import React, { lazy, Suspense } from "react";
 import DynamicGameLoader from "./components/DynamicGameLoader";
-
-const appsContext = require.context("./apps", true, /\.js$/);
+import { getDynamicGames } from "./services/dynamicGames";
+import Navbar from "./components/Navbar";
 
 // Componente de carga
 const LoadingFallback = () => (
@@ -15,7 +15,17 @@ const LoadingFallback = () => (
   </div>
 );
 
+// Componente wrapper para juegos
+const GameWrapper = ({ children }) => (
+  <div className="min-h-screen bg-gray-100">
+    <Navbar />
+    {children}
+  </div>
+);
+
 // Crear rutas estáticas
+const appsContext = require.context("./apps", true, /\.js$/);
+
 const staticGames = appsContext.keys().map((key) => {
   const name = key.split("/").pop().replace(/\.js$/, "");
   const path = `/${name.toLowerCase().replace(/\s+/g, "-")}`;
@@ -33,7 +43,9 @@ const staticGames = appsContext.keys().map((key) => {
     path,
     element: (
       <Suspense fallback={<LoadingFallback />}>
-        <LazyComponent />
+        <GameWrapper>
+          <LazyComponent />
+        </GameWrapper>
       </Suspense>
     ),
     name: nameMatch ? nameMatch[1].trim() : name,
@@ -46,18 +58,42 @@ const staticGames = appsContext.keys().map((key) => {
   };
 });
 
-// Exportar las rutas
-export const routes = [
+// Obtener juegos dinámicos
+const dynamicGames = getDynamicGames().map((game) => {
+  // Crear un componente lazy para el juego dinámico
+  const DynamicComponent = game.component;
+
+  return {
+    path: game.path,
+    element: (
+      <Suspense fallback={<LoadingFallback />}>
+        <GameWrapper>
+          <DynamicComponent />
+        </GameWrapper>
+      </Suspense>
+    ),
+    name: game.name,
+    description: game.description,
+    categories: game.categories,
+  };
+});
+
+// Crear todas las rutas
+const allRoutes = [
   {
     path: "/load-game",
     element: <DynamicGameLoader />,
   },
   ...staticGames,
+  ...dynamicGames,
 ];
+
+// Exportar las rutas
+export const routes = allRoutes;
 
 // Exportar categorías únicas
 export const categories = [
-  ...new Set(routes.flatMap((route) => route.categories || [])),
+  ...new Set(allRoutes.flatMap((route) => route.categories || [])),
 ];
 
 export default routes;
