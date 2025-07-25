@@ -1,4 +1,4 @@
-// Servicio para manejar juegos dinámicos
+// Servicio para manejar juegos dinámicos y estáticos
 import React from "react";
 import * as Babel from "@babel/standalone";
 import Navbar from "../components/Navbar";
@@ -96,6 +96,7 @@ try {
         return {
           ...game,
           component,
+          isStatic: false,
         };
       } catch (error) {
         console.error(`Error al cargar el juego ${game.name}:`, error);
@@ -116,9 +117,34 @@ try {
   localStorage.removeItem(STORAGE_KEY);
 }
 
+// Lista de todos los juegos
+let allGames = [...dynamicGames];
+
+// Función para añadir juegos estáticos
+export const addStaticGames = (staticGames) => {
+  const processedGames = staticGames
+    .filter(isValidGame)
+    .map((game) => {
+      try {
+        const component = rebuildComponent(game.code);
+        return {
+          ...game,
+          component,
+          isStatic: true,
+        };
+      } catch (error) {
+        console.error(`Error al cargar el juego estático ${game.name}:`, error);
+        return null;
+      }
+    })
+    .filter(Boolean);
+
+  allGames = [...processedGames, ...dynamicGames];
+};
+
 export const addDynamicGame = (gameData) => {
   // Validar que el juego no exista ya
-  if (dynamicGames.some((game) => game.path === gameData.path)) {
+  if (allGames.some((game) => game.path === gameData.path)) {
     throw new Error("Ya existe un juego con este nombre");
   }
 
@@ -131,6 +157,7 @@ export const addDynamicGame = (gameData) => {
   const gameWithPath = {
     ...gameData,
     path: gameData.path.startsWith("/") ? gameData.path : `/${gameData.path}`,
+    isStatic: false,
   };
 
   // Reconstruir el componente
@@ -143,6 +170,7 @@ export const addDynamicGame = (gameData) => {
   };
 
   dynamicGames.push(gameWithComponent);
+  allGames.push(gameWithComponent);
 
   // Guardar en localStorage solo los metadatos
   localStorage.setItem(
@@ -153,11 +181,12 @@ export const addDynamicGame = (gameData) => {
 };
 
 export const getDynamicGames = () => {
-  return [...dynamicGames];
+  return [...allGames];
 };
 
 export const removeDynamicGame = (path) => {
   dynamicGames = dynamicGames.filter((game) => game.path !== path);
+  allGames = allGames.filter((game) => game.path !== path);
   // Actualizar localStorage
   localStorage.setItem(
     STORAGE_KEY,
@@ -167,6 +196,7 @@ export const removeDynamicGame = (path) => {
 
 export const clearDynamicGames = () => {
   dynamicGames = [];
+  allGames = allGames.filter((game) => game.isStatic);
   // Limpiar localStorage
   localStorage.removeItem(STORAGE_KEY);
 };

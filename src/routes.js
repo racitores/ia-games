@@ -3,9 +3,9 @@
 // IMPORTANTE: No modifiques este archivo manualmente, se generará automáticamente
 // basado en el contenido del directorio /src/apps
 
-import React, { lazy, Suspense } from "react";
+import React, { Suspense } from "react";
 import DynamicGameLoader from "./components/DynamicGameLoader";
-import { getDynamicGames } from "./services/dynamicGames";
+import { getDynamicGames, addStaticGames } from "./services/dynamicGames";
 import Navbar from "./components/Navbar";
 
 // Componente de carga
@@ -23,7 +23,7 @@ const GameWrapper = ({ children }) => (
   </div>
 );
 
-// Crear rutas estáticas
+// Cargar juegos estáticos
 const appsContext = require.context("./apps", true, /\.js$/);
 
 const staticGames = appsContext.keys().map((key) => {
@@ -36,39 +36,42 @@ const staticGames = appsContext.keys().map((key) => {
   const descriptionMatch = source.match(/\/\/\s*description:\s*(.+)/);
   const categoriesMatch = source.match(/\/\/\s*categories:\s*(.+)/);
 
-  // Crear el componente lazy
-  const LazyComponent = lazy(() => import(`./apps/${name}.js`));
+  let categories = ["General"];
+  if (categoriesMatch) {
+    try {
+      categories = categoriesMatch[1]
+        .split(",")
+        .map((cat) => cat.trim())
+        .filter(Boolean);
+    } catch (error) {
+      console.error(`Error al procesar categorías para ${name}:`, error);
+    }
+  }
 
   return {
-    path,
-    element: (
-      <Suspense fallback={<LoadingFallback />}>
-        <GameWrapper>
-          <LazyComponent />
-        </GameWrapper>
-      </Suspense>
-    ),
     name: nameMatch ? nameMatch[1].trim() : name,
     description: descriptionMatch
       ? descriptionMatch[1].trim()
       : `Juego ${name}`,
-    categories: categoriesMatch
-      ? categoriesMatch[1].split(",").map((cat) => cat.trim())
-      : ["General"],
+    categories: categories,
+    path: path,
+    code: source,
+    isStatic: true,
   };
 });
 
-// Obtener juegos dinámicos
-const dynamicGames = getDynamicGames().map((game) => {
-  // Crear un componente lazy para el juego dinámico
-  const DynamicComponent = game.component;
+// Añadir juegos estáticos al servicio
+addStaticGames(staticGames);
 
+// Obtener todos los juegos
+const games = getDynamicGames().map((game) => {
+  const GameComponent = game.component;
   return {
     path: game.path,
     element: (
       <Suspense fallback={<LoadingFallback />}>
         <GameWrapper>
-          <DynamicComponent />
+          <GameComponent />
         </GameWrapper>
       </Suspense>
     ),
@@ -84,8 +87,7 @@ const allRoutes = [
     path: "/load-game",
     element: <DynamicGameLoader />,
   },
-  ...staticGames,
-  ...dynamicGames,
+  ...games,
 ];
 
 // Exportar las rutas

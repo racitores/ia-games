@@ -1,0 +1,12 @@
+{
+  "4EnRaya": {
+    "name": "4 en Raya",
+    "description": "El clásico juego de 4 en Raya con animaciones y efectos visuales",
+    "categories": ["Estrategia", "Clásicos", "Multijugador"]
+  },
+  "Contador": {
+    "name": "Contador",
+    "description": "Un simple contador interactivo que te permite incrementar y decrementar números",
+    "categories": ["Interactivo", "Básico", "React", "Matemáticas"]
+  }
+}
